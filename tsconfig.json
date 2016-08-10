@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es2015",
+        "outDir": "build",
+        "sourceMap": true
+    },
+    "files": [
+        "app.ts",
+        "typings/index.d.ts"
+    ]
+}
