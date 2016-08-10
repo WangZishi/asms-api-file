@@ -10,7 +10,7 @@ const upload = multer({ dest: 'uploads/' });
 const tmp = multer({ dest: 'tmp/' });
 
 const app = new Koa();
-const port = 7003;
+const port = process.env.PORT;
 
 // response
 app.use((ctx, next) => {
