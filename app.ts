@@ -22,6 +22,7 @@ app.use(router().get('/api/v3/file/:dir/:fileName', async (ctx, next) => {
     console.log('get');
     let dir = ctx.params.dir,
         fileName = ctx.params.fileName;
+    ctx.set('Content-Disposition', `attachment; filename*= UTF-8''${encodeURIComponent(fileName)}`);
     await send(ctx, `${dir}/${fileName}`);
 }).routes());
 
