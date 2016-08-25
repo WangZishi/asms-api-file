@@ -51,6 +51,14 @@ app.use(router().post('/api/v3/file/:dir', async (ctx, next) => {
     if (dir === 'tmp') setTimeout(() => unlink(path), 1000 * 60 * 1);
 }).routes());
 
+app.use(router().delete('/api/v3/file/:dir', async (ctx, next) => {
+    console.log('delete');
+    let dir = ctx.params.dir,
+        fileName = ctx.query.fileName;
+    await unlink(`${dir}/${fileName}`);
+    ctx.body = 'success';
+}).routes());
+
 app.listen(port);
 
 console.log(`app is listening on port ${port}.`);
