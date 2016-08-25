@@ -22,6 +22,7 @@ app.use(router().get('/api/v3/file/:dir/:fileName', async (ctx, next) => {
     console.log('get');
     let dir = ctx.params.dir,
         fileName = ctx.params.fileName;
+    ctx.set('Content-Disposition', `attachment; filename*= UTF-8''${encodeURIComponent(fileName)}`);
     await send(ctx, `${dir}/${fileName}`);
 }).routes());
 
@@ -48,6 +49,14 @@ app.use(router().post('/api/v3/file/:dir', async (ctx, next) => {
     };
 
     if (dir === 'tmp') setTimeout(() => unlink(path), 1000 * 60 * 1);
+}).routes());
+
+app.use(router().delete('/api/v3/file/:dir', async (ctx, next) => {
+    console.log('delete');
+    let dir = ctx.params.dir,
+        fileName = ctx.query.fileName;
+    await unlink(`${dir}/${fileName}`);
+    ctx.body = 'success';
 }).routes());
 
 app.listen(port);
