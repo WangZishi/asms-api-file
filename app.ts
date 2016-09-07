@@ -5,6 +5,7 @@ import { createWriteStream, createReadStream, unlink, renameSync } from 'fs';
 const multer = require('koa-multer');
 const router = require('koa-router');
 const send = require('koa-send');
+const Convert = require('koa-convert');
 
 const upload = multer({ dest: 'uploads/' });
 const tmp = multer({ dest: 'tmp/' });
@@ -12,7 +13,14 @@ const tmp = multer({ dest: 'tmp/' });
 const app = new Koa();
 const port = process.env.PORT;
 
+const CORSConfig = {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
+}
+
 // response
+app.use(Convert(require('koa-cors')(CORSConfig)));
+
 app.use((ctx, next) => {
     if (ctx.path !== '/health') return next();
     ctx.body = 'ok';
