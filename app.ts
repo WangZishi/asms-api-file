@@ -1,6 +1,6 @@
 import * as Koa from 'koa';
 import * as _ from 'lodash';
-import { createWriteStream, createReadStream, unlink, renameSync } from 'fs';
+import { createWriteStream, createReadStream, unlink, renameSync, readdirSync } from 'fs';
 
 const multer = require('koa-multer');
 const router = require('koa-router');
@@ -57,6 +57,21 @@ app.use(router().delete('/api/v3/file/:dir', async (ctx, next) => {
         fileName = ctx.query.fileName;
     await unlink(`${dir}/${fileName}`);
     ctx.body = 'success';
+}).routes());
+
+app.use(router().get('/api/v3/file/check/:dir/:fileName', async (ctx, next) => {
+    console.log('check file');
+    let dir = ctx.params.dir,
+        fileName = ctx.params.fileName,
+        isExist = false,
+        filenames = readdirSync(`${dir}`);
+    ctx.set('Content-Disposition', `attachment; filename*= UTF-8''${encodeURIComponent(fileName)}`);
+
+    filenames.forEach(filename => {
+        if (filename === fileName) isExist = true;
+    });
+    
+    ctx.body = isExist;
 }).routes());
 
 app.listen(port);
